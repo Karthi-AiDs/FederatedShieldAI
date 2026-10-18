@@ -32,6 +32,22 @@ Collaborative machine-learning systems can be affected when one participant subm
 6. **Evaluate:** compare clean, attacked, and defended runs on a held-out test set using precision, recall, F1, accuracy, and confusion-matrix counts.
 7. **Audit and visualize:** write JSON/JSONL experiment outputs and display metrics and client decisions in a lightweight local dashboard.
 
+## Demo screenshots
+
+The screenshots below show the running local demo dashboard using the recorded BankSim controlled experiment. They are illustrative evidence of the current prototype UI, not proof of production deployment.
+
+### Dashboard overview
+
+![FederatedShield AI dashboard overview](screenshots/dashboard-overview.jpg)
+
+Shows clean, attacked, and defended F1-scores, the model-comparison table, and the attack-containment summary.
+
+### Client trust and security audit
+
+![Client trust and security audit events](screenshots/client-trust-audit.jpg)
+
+Shows client update acceptance/rejection counts and recent audit decisions from the controlled amplified-update experiment.
+
 ## Architecture and workflow
 
 The diagrams below describe the **current implemented prototype**. The three clients are simulated in one Python process; arrows represent logical data/control flow, not separate network connections.
