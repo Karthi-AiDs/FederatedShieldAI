@@ -1,3 +1,4 @@
+
 # FederatedShield AI
 ### Privacy-Preserving Collaborative Fraud Detection — Research Prototype on IBM LinuxONE
 
@@ -176,6 +177,7 @@ These figures are from one controlled synthetic-data experiment and the configur
 Machine-readable outputs are generated under `outputs_public/` when the scripts are run.
 
 ## Run on IBM LinuxONE
+<img width="1920" height="1200" alt="Screenshot (213)" src="https://github.com/user-attachments/assets/040a49dc-e871-4373-8e1b-75bc21fc3937" />
 
 The following commands assume the project is already present on your LinuxONE machine and you are in the project root.
 
