@@ -34,39 +34,95 @@ Collaborative machine-learning systems can be affected when one participant subm
 
 ## Architecture and workflow
 
-```text
-BankSim CSV (synthetic)
-        |
-        v
-Preprocessing + stratified train/validation/test split
-        |
-        v
-Three simulated client training partitions
-        |
-        v
-Local logistic-regression updates
-        |
-        +------> Clean FedAvg baseline
-        |
-        +------> Amplified client update (attack scenario)
-        |                   |
-        |                   v
-        |           Update validation + norm check
-        |                   |
-        |           accept/reject + audit event
-        |                   |
-        +-------------------v
-                   Defended aggregation
-                           |
-                           v
-             Held-out test evaluation
-                           |
-                           v
-             JSON metrics + JSONL audit log
-                           |
-                           v
-                  Local web dashboard
+The diagrams below describe the **current implemented prototype**. The three clients are simulated in one Python process; arrows represent logical data/control flow, not separate network connections.
+
+### 1. System architecture
+
+```mermaid
+flowchart TB
+    subgraph DATA["Data preparation"]
+        RAW["BankSim synthetic CSV"]
+        PREP["Preprocessing<br/>feature encoding + stratified split"]
+        PART["Three client partitions<br/>A · B · C"]
+        RAW --> PREP --> PART
+    end
+
+    subgraph FED["Federated-learning simulation · one process"]
+        A["Client A<br/>local logistic regression"]
+        B["Client B<br/>local logistic regression"]
+        C["Client C<br/>local logistic regression"]
+        COORD["Coordinator<br/>collect client updates"]
+        DEF["Update validation<br/>finite-value checks + norm bound"]
+        AGG["FedAvg aggregation<br/>accepted updates only"]
+        PART --> A
+        PART --> B
+        PART --> C
+        A --> COORD
+        B --> COORD
+        C --> COORD
+        COORD --> DEF
+        DEF -->|"accepted"| AGG
+        DEF -->|"rejected update"| AUDIT
+    end
+
+    subgraph EVAL["Evaluation and observability"]
+        AUDIT["JSONL audit log<br/>accept/reject decision"]
+        MODEL["Aggregated model"]
+        TEST["Held-out test evaluation"]
+        METRICS["JSON metrics<br/>clean vs attacked vs defended"]
+        DASH["Local dashboard<br/>127.0.0.1:8501"]
+        AGG --> MODEL --> TEST --> METRICS
+        METRICS --> DASH
+        AUDIT --> DASH
+    end
+
+    classDef data fill:#e8f2ff,stroke:#4776a8,color:#172b4d
+    classDef core fill:#e8f7ed,stroke:#39835a,color:#143d25
+    classDef security fill:#fff2d8,stroke:#b77b18,color:#533707
+    classDef observe fill:#f1eaff,stroke:#7a58a5,color:#302044
+    class RAW,PREP,PART data
+    class A,B,C,COORD,AGG,MODEL core
+    class DEF,AUDIT security
+    class TEST,METRICS,DASH observe
 ```
+
+### 2. Experiment workflow
+
+```mermaid
+flowchart TD
+    START([Start experiment]) --> PREP["Prepare BankSim dataset"]
+    PREP --> SPLIT["Create stratified train / validation / test splits"]
+    SPLIT --> CLIENTS["Partition training data into 3 simulated clients"]
+    CLIENTS --> CLEAN["Run clean FedAvg baseline"]
+    CLIENTS --> ATTACK["Attack scenario: amplify Client C update"]
+    ATTACK --> CHECK["Validate update values and compute update norm"]
+    CHECK --> DECISION{"Within configured norm bound?"}
+    DECISION -->|"Yes"| ACCEPT["Accept update"]
+    DECISION -->|"No"| REJECT["Reject update"]
+    ACCEPT --> AGG["Aggregate accepted updates"]
+    REJECT --> LOG["Write rejection to audit log"]
+    LOG --> AGG
+    CLEAN --> EVAL["Evaluate clean, attacked and defended models"]
+    AGG --> EVAL
+    EVAL --> RESULTS["Write metrics and confusion-matrix counts"]
+    RESULTS --> DASH["View metrics and audit events in dashboard"]
+    DASH --> END([End])
+```
+
+### 3. Trust and containment decision
+
+```mermaid
+flowchart LR
+    U["Client model update"] --> V["Finite-value validation"]
+    V -->|"Invalid / non-finite"| R["Reject + audit"]
+    V -->|"Valid"| N["Calculate update norm"]
+    N --> T{"Norm exceeds configured bound?"}
+    T -->|"Yes"| R
+    T -->|"No"| A["Accept for aggregation"]
+    A --> F["FedAvg"]
+```
+
+**Diagram scope:** this implementation demonstrates a controlled, amplified-update attack and a simple update-norm defense. It does not currently implement separate client machines, differential privacy, secure aggregation, or general-purpose attack detection. Rejection is selective at the update level, not network-level isolation or production containment.
 
 ## Technology stack
 
