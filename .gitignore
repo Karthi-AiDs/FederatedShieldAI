@@ -15,7 +15,7 @@ id_ed25519
 secrets/
 
 # Raw and generated datasets
- data_public/raw/
+data_public/raw/
 data_public/processed/
 *.csv
 
