@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+.env.*
+!.env.example
+
+# Secrets and private connection material
+*.pem
+*.key
+id_rsa
+id_ed25519
+secrets/
+
+# Raw and generated datasets
+ data_public/raw/
+data_public/processed/
+*.csv
+
+# Generated models and experiment artifacts; publish reviewed summaries intentionally
+*.npz
+outputs_public/*.json
+outputs_public/*.jsonl
+outputs_public/*backup*
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
