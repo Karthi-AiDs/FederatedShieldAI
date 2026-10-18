@@ -30,3 +30,11 @@ outputs_public/*backup*
 Thumbs.db
 .vscode/
 .idea/
+
+# Additional local datasets and experiment outputs
+data/
+data_v2/
+outputs/
+outputs_dp/
+outputs_v2/
+outputs_v2_precision20/
