@@ -283,14 +283,24 @@ The exact local folder may differ. Generated files and scripts should be checked
 - The update-norm check is a simple defense baseline and may reject legitimate outlier updates or miss attacks that stay within the accepted norm.
 - Do not expose the dashboard to a public network without appropriate authentication, TLS, and deployment hardening.
 
-## Limitations and future work
+## Limitations
 
-- Run clients as separate processes or machines and introduce a real coordinator/client protocol.
-- Evaluate additional poisoning strategies, including sign-flipping, stealthy bounded updates, and adaptive attacks.
-- Calibrate defenses on validation data and test robustness across random seeds and client data distributions.
-- Add secure aggregation and differential privacy with a documented privacy budget.
-- Add client authentication, authorization, transport security, and tamper-evident audit storage.
-- Add automated tests, pinned dependencies, and reproducible experiment configuration.
+- The three clients run in one Python process; they are not separate machines or isolated environments.
+- The update-norm check is a baseline for an intentionally amplified update. It may reject legitimate outliers or miss stealthy attacks.
+- The dataset is synthetic and results do not establish real-world banking performance.
+- Differential privacy, secure aggregation, production client authentication, and encrypted client-to-coordinator transport are not implemented.
+- The local dashboard is a demo and should not be exposed to a public network without authentication, TLS, and deployment hardening.
+
+## Future scope
+
+1. **Integrate the application prototype:** connect the teammate's UI prototype to the LinuxONE-backed Python service through documented API endpoints, keeping the current prototype and dashboard clearly distinguished until integration is tested.
+2. **Move from simulation to distributed clients:** run clients as separate processes or machines and add a coordinator/client protocol with authenticated communication.
+3. **Strengthen poisoning defenses:** test sign-flipping, stealthy bounded updates, adaptive attacks, and non-IID client data; compare norm clipping with robust aggregation methods.
+4. **Improve evaluation:** repeat experiments across random seeds, report confidence intervals, tune thresholds on validation data, and track precision, recall, F1, false-positive rate, and confusion matrices.
+5. **Add privacy protections:** investigate secure aggregation and differential privacy, documenting the threat model and privacy budget rather than claiming these protections before implementation.
+6. **Harden security and auditability:** add client authentication/authorization, TLS, tamper-evident audit storage, and explicit policies for update acceptance and quarantine.
+7. **Improve reproducibility and operations:** pin tested dependencies, add automated tests, use configuration files, document dataset provenance, and provide a one-command demo launcher.
+8. **Explore deployment readiness:** profile performance on IBM LinuxONE, measure resource use and latency, and only claim hardware-specific security or acceleration after it is implemented and verified.
 
 ## Reproducibility
 
