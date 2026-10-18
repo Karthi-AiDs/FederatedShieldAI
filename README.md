@@ -38,13 +38,15 @@ The screenshots below show the running local demo dashboard using the recorded B
 
 ### Dashboard overview
 
-![FederatedShield AI dashboard overview](screenshots/dashboard-overview.jpg)
+<img width="1920" height="1200" alt="image" src="https://github.com/user-attachments/assets/ec7a8ff1-7feb-4d07-80cb-d3a49c5fb51c" />
+
 
 Shows clean, attacked, and defended F1-scores, the model-comparison table, and the attack-containment summary.
 
 ### Client trust and security audit
 
-![Client trust and security audit events](screenshots/client-trust-audit.jpg)
+<img width="1920" height="1200" alt="image" src="https://github.com/user-attachments/assets/b6605bd6-a669-46a0-862b-6cb11a022bd1" />
+
 
 Shows client update acceptance/rejection counts and recent audit decisions from the controlled amplified-update experiment.
 
